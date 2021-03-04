@@ -9,14 +9,16 @@ import javax.servlet.http.*;
 @WebServlet(name = "WhatNumberServlet", urlPatterns = "/count-page")
 public class CountPage extends HttpServlet {
 
+    int count = 0;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userClear = req.getParameter("clear");
-        Integer count = 1;
+
 
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        if(userClear == "yes"){
+        if(userClear != null){
             count = 1;
         } else {
             count++;
