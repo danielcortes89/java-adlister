@@ -12,6 +12,8 @@
     <title>Title</title>
 </head>
 <body>
-
+    <%@ include file="partials/navbar.jsp"%>
+<h1>This is the body</h1>
+    <%@ include file="partials/footer.jsp"%>
 </body>
 </html>
