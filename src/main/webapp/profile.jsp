@@ -14,6 +14,15 @@
 <body>
     <%@ include file="partials/navbar.jsp"%>
 <h1>This is the body</h1>
+
+    <c:choose>
+        <c:when test="${param.containsKey('username')}">
+            <p>Hello There ${param.username}</p>
+        </c:when>
+        <c:otherwise>
+            <p>Hello Unauthenticated user!</p>
+        </c:otherwise>
+    </c:choose>
     <%@ include file="partials/footer.jsp"%>
 </body>
 </html>

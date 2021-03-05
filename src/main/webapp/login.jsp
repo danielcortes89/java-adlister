@@ -6,21 +6,44 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
+
+<%
+    String wrongCredentials = "";
+    if(request.getMethod().equals("POST")){
+        if(request.getParameter("username").equals("admin") && request.getParameter("userPassword").equals("password")) {
+            response.sendRedirect("/profile.jsp?username=" + request.getParameter("username"));
+        }
+            //        } else {
+//            response.sendRedirect("/login.jsp");
+//        }
+
+        wrongCredentials = "Username or password Invalid";
+
+
+    }
+
+%>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-    <form action="POST">
+    <form method="POST" action="/login.jsp">
+        <p>
+            <%= wrongCredentials %>
+        </p>
         <label for="username">Username:</label>
         <input type="text" placeholder="Username" id="username">
-        <label for="password">Password:</label>
-        <input type="text" placeholder="Password" id="password">
-        <button>Search</button>
+
+        <br>
+
+        <label for="userPassword">Password:</label>
+        <input type="password" placeholder="Password" id="userPassword">
+        <input type="submit" value="login">
     </form>
-    <c:if test="param.username != null">
-        <p>Username is: ${param.username}</p>
-    </c:if>
+<%--    <c:if test="param.username != null">--%>
+<%--        <p>Username is: ${param.username}</p>--%>
+<%--    </c:if>--%>
 </body>
 </html>
