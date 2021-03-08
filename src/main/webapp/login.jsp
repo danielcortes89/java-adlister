@@ -10,17 +10,12 @@
 
 <%
     String wrongCredentials = "";
+
     if(request.getMethod().equals("POST")){
         if(request.getParameter("username").equals("admin") && request.getParameter("userPassword").equals("password")) {
             response.sendRedirect("/profile.jsp?username=" + request.getParameter("username"));
         }
-            //        } else {
-//            response.sendRedirect("/login.jsp");
-//        }
-
         wrongCredentials = "Username or password Invalid";
-
-
     }
 
 %>
@@ -34,12 +29,12 @@
             <%= wrongCredentials %>
         </p>
         <label for="username">Username:</label>
-        <input type="text" placeholder="Username" id="username">
+        <input type="text" name="username" placeholder="Username" id="username">
 
         <br>
 
         <label for="userPassword">Password:</label>
-        <input type="password" placeholder="Password" id="userPassword">
+        <input type="password" name="userPassword" placeholder="Password" id="userPassword">
         <input type="submit" value="login">
     </form>
 <%--    <c:if test="param.username != null">--%>
