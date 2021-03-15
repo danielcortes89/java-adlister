@@ -1,12 +1,10 @@
 package com.codeup.adlister.dao;
+import java.sql.*;
 
+//import com.codeup.adlister.models.Ad;
 import com.codeup.adlister.models.Ad;
 import com.mysql.cj.jdbc.Driver;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +26,14 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> all() {
-        Statement stmt = null;
+//        Statement stmt = null;
+
+        String sql = "SELECT * FROM ads";
         try {
+            Statement stmt = connection.createStatement(sql);
             stmt = connection.createStatement();
+
+//            String searchTermWithWildcards = "%" + term + "%";
             ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
             return createAdsFromResults(rs);
         } catch (SQLException e) {
@@ -40,6 +43,7 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public Long insert(Ad ad) {
+
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
@@ -49,6 +53,25 @@ public class MySQLAdsDao implements Ads {
         } catch (SQLException e) {
             throw new RuntimeException("Error creating a new ad.", e);
         }
+    }
+
+    @Override
+    public List<Ad> search(String term) {
+        String sql = "SELECT * FROM ads WHERE title LIKE ?";
+        String searchTermWithWildcards = "%" + term + "%";
+
+        ResultSet rs;
+        try  {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, searchTermWithWildcards);
+
+            rs = stmt.executeQuery();
+            return generateAds(rs);
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+
+        return null;
     }
 
     private String createInsertQuery(Ad ad) {
