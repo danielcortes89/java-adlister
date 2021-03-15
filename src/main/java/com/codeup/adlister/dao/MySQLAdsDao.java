@@ -5,6 +5,7 @@ import java.sql.*;
 import com.codeup.adlister.models.Ad;
 import com.mysql.cj.jdbc.Driver;
 
+//import javax.servlet.jsp.jstl.core.Config;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +29,9 @@ public class MySQLAdsDao implements Ads {
     public List<Ad> all() {
 //        Statement stmt = null;
 
-        String sql = "SELECT * FROM ads";
+//        String sql = "SELECT * FROM ads";
         try {
-            Statement stmt = connection.createStatement(sql);
+            Statement stmt = connection.createStatement("SELECT * FROM ads");
             stmt = connection.createStatement();
 
 //            String searchTermWithWildcards = "%" + term + "%";
@@ -45,8 +46,13 @@ public class MySQLAdsDao implements Ads {
     public Long insert(Ad ad) {
 
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO ads(user_id, title, description) VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+//            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1, ad.getUserId());
+    stmt.setString(2, ad.getTitle());
+    stmt.setString(3, ad.getDescription());
+    stmt.executeUpdate();
+
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
             return rs.getLong(1);
@@ -66,7 +72,7 @@ public class MySQLAdsDao implements Ads {
             stmt.setString(1, searchTermWithWildcards);
 
             rs = stmt.executeQuery();
-            return generateAds(rs);
+            return createAdsFromResults(rs);
         } catch (SQLException throwables){
             throwables.printStackTrace();
         }
@@ -74,12 +80,12 @@ public class MySQLAdsDao implements Ads {
         return null;
     }
 
-    private String createInsertQuery(Ad ad) {
-        return "INSERT INTO ads(user_id, title, description) VALUES "
-            + "(" + ad.getUserId() + ", "
-            + "'" + ad.getTitle() +"', "
-            + "'" + ad.getDescription() + "')";
-    }
+//    private String createInsertQuery(Ad ad) {
+//        return "INSERT INTO ads(user_id, title, description) VALUES "
+//            + "(" + ad.getUserId() + ", "
+//            + "'" + ad.getTitle() +"', "
+//            + "'" + ad.getDescription() + "')";
+//    }
 
     private Ad extractAd(ResultSet rs) throws SQLException {
         return new Ad(

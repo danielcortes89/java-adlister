@@ -22,9 +22,9 @@
 
     <h1>Product Search Results</h1>
     <h2>Showing Results for <c:out value="${searchTerm}" /></h2>
-    <c:forEach var="product" items="${searchResults}">
+    <c:forEach var="ad" items="${searchResults}">
         <h3>
-            <c:out value="${product.name}" />
+            <c:out value="${pr.name}" />
             <small><c:out value="${product.price}" /></small>
         </h3>
     </c:forEach>
